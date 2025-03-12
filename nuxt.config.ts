@@ -1,8 +1,8 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  ssr: false, // Disable server-side rendering (for static deployment)
+  ssr: true,
   nitro: {
-    preset: "static", // Enable static site generation
+    preset: "vercel",
   },
   compatibilityDate: "2024-11-01",
   modules: ["@nuxtjs/tailwindcss"],
