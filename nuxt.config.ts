@@ -1,8 +1,8 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  ssr: false,
+  ssr: false, // Disable server-side rendering (for static deployment)
   nitro: {
-    preset: "static",
+    preset: "static", // Enable static site generation
   },
   compatibilityDate: "2024-11-01",
   modules: ["@nuxtjs/tailwindcss"],
@@ -13,6 +13,6 @@ export default defineNuxtConfig({
   ],
 
   app: {
-    baseURL: "/Portfolio",
+    baseURL: "/Portfolio", // Must match your GitHub repo name exactly!
   },
 });
