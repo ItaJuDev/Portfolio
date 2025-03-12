@@ -11,8 +11,4 @@ export default defineNuxtConfig({
     "@fortawesome/fontawesome-free/css/all.css",
     "~/assets/css/transitions.css",
   ],
-
-  app: {
-    baseURL: "/Portfolio", // Must match your GitHub repo name exactly!
-  },
 });
