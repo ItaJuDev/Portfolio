@@ -5,19 +5,19 @@ const projectCategories = [
     projects: [
       {
         title: "12TailsOnline Server",
-        image: "/12TailsPoster.jpg",
+        image: "12TailsPoster.jpg",
         link: "#",
         description: "A multiplayer online game server.",
       },
       {
         title: "Math Related",
-        image: "/MathRelateGame.png",
+        image: "MathRelateGame.png",
         link: "#",
         description: "An educational math-based game.",
       },
       {
         title: "VR Experiment",
-        image: "/VrGame.png",
+        image: "VrGame.png",
         link: "#",
         description: "A virtual reality game experiment.",
       },
@@ -28,13 +28,13 @@ const projectCategories = [
     projects: [
       {
         title: "AZ Mirror",
-        image: "/AZMirror.png",
+        image: "AZMirror.png",
         link: "#",
         description: "3D model viewer for startups.",
       },
       {
         title: "Trading Reward",
-        image: "/TradingReward.png",
+        image: "TradingReward.png",
         link: "#",
         description: "A web platform for tracking rewards.",
       },
@@ -45,7 +45,7 @@ const projectCategories = [
     projects: [
       {
         title: "TrackIt",
-        image: "/TrackIt.png",
+        image: "TrackIt.png",
         link: "#",
         description: "A mobile app for tracking expenses.",
       },

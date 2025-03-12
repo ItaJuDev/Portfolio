@@ -37,24 +37,6 @@ onUnmounted(() => {
       junior.
     </NuxtLink>
 
-    <!-- Center: GitHub & LinkedIn -->
-    <div class="flex space-x-4">
-      <a
-        href="https://github.com/ItaJuDev"
-        target="_blank"
-        class="text-gray-300 hover:text-white transition"
-      >
-        <i class="fab fa-github text-lg"></i>
-      </a>
-      <a
-        href="https://www.linkedin.com/in/vitit-charubencharat/"
-        target="_blank"
-        class="text-gray-300 hover:text-white transition"
-      >
-        <i class="fab fa-linkedin text-lg"></i>
-      </a>
-    </div>
-
     <!-- Right: Navigation Links -->
     <ul class="flex space-x-4">
       <li v-for="link in links" :key="link.name">

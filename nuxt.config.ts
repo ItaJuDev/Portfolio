@@ -8,11 +8,7 @@ export default defineNuxtConfig({
     "~/assets/css/transitions.css",
   ],
 
-  target: "static", // Required for GitHub Pages
   app: {
-    baseURL: "/Portfolio/", // GitHub Pages repo name
-  },
-  generate: {
-    fallback: "404.html", // Ensures SPA routing works on GitHub Pages
+    baseURL: "/Portfolio/", // Must match your GitHub repo name exactly!
   },
 });
