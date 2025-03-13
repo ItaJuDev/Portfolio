@@ -15,9 +15,20 @@
 
       <!-- Learning Projects -->
       <div
-        class="bg-black/20 p-6 rounded-lg shadow-lg border border-gray-600 backdrop-blur-lg md:col-span-2"
+        class="bg-black/20 p-6 rounded-lg shadow-lg border border-gray-600 backdrop-blur-lg md:col-span-2 flex flex-col"
       >
-        <h3 class="text-xl font-semibold text-gray-100">Learning Projects</h3>
+        <div class="flex justify-between items-center">
+          <h3 class="text-xl font-semibold text-gray-100">Learning Projects</h3>
+
+          <!-- More Work Button (Navigate to /projects) -->
+          <button
+            @click="$router.push('/projects')"
+            class="text-sm text-blue-400 hover:underline flex items-center gap-1"
+          >
+            More Work →
+          </button>
+        </div>
+
         <div class="mt-4 space-y-4">
           <!-- TrackIt -->
           <a href="https://github.com/ItaJuDev/TrackIt" class="block hover-box">
