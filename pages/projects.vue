@@ -21,12 +21,11 @@ const projectCategories = [
         ],
       },
       {
-        title: "Math Related Game",
-        image: "/MathRelateGame.png",
+        title: "HeroBois",
+        image: "/HeroBois.png",
         description: "An educational math-based game.",
-        shortTalk:
-          "A fun game designed to improve math skills through interactive challenges.",
-        video: "",
+        shortTalk: "A fun game designed to improve skill in rouge-like games",
+        video: "https://www.youtube.com/embed/MbqKK-7Fmko",
       },
       {
         title: "VR Experiment",
@@ -34,7 +33,7 @@ const projectCategories = [
         description: "A virtual reality game experiment.",
         shortTalk:
           "Exploring the future of gaming with VR, providing an immersive experience.",
-        video: "/videos/vr-demo.mp4",
+        video: "https://www.youtube.com/embed/k0ZGAGonSXU",
       },
     ],
   },
@@ -67,7 +66,7 @@ const projectCategories = [
         image: "/TrackIt.png",
         description: "A mobile app for tracking expenses.",
         shortTalk: "A simple and intuitive app for managing personal finances.",
-        video: "",
+        video: "https://www.youtube.com/embed/7nfjNrI96BA",
       },
     ],
   },
