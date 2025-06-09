@@ -38,6 +38,20 @@ yarn dev
 bun run dev
 ```
 
+## Server API & Admin
+
+This project exposes CRUD endpoints under `/api/projects` that persist data to `server/data/projects.json`.
+
+To protect the admin interface set an environment variable `ADMIN_PASSWORD` before starting the server. A simple back-office is available at `/admin` once authenticated.
+
+### Example
+
+```bash
+ADMIN_PASSWORD=mySecret bun run dev
+```
+
+After starting visit `http://localhost:3000/admin` to manage projects.
+
 ## Production
 
 Build the application for production:

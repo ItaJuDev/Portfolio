@@ -4,6 +4,9 @@ export default defineNuxtConfig({
   nitro: {
     preset: "vercel",
   },
+  runtimeConfig: {
+    ADMIN_PASSWORD: process.env.ADMIN_PASSWORD || "admin",
+  },
   compatibilityDate: "2024-11-01",
   modules: ["@nuxtjs/tailwindcss"],
   devtools: { enabled: true },
