@@ -1,76 +1,23 @@
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 
-const projectCategories = [
-  {
-    category: "Game Development",
-    projects: [
-      {
-        title: "12TailsOnline Server",
-        image: "/12TailsOnline/12TailsPoster.jpg",
-        description: "A multiplayer online game server.",
-        shortTalk:
-          "Hi there! I'm just developing a game server for 12TailsOnline for learning something new, and I'm loving this game since it published in 2011. I never find the game make me fun and happy like this game. So I decided to make a server for this game. I hope it will be the Dream server for every one because I developed it with my love <3.",
-        video: "https://www.youtube.com/embed/P8xABk6rdns",
-        images: [
-          "/12TailsOnline/1.png",
-          "/12TailsOnline/2.png",
-          "/12TailsOnline/3.png",
-          "/12TailsOnline/4.png",
-          "/12TailsOnline/5.png",
-        ],
-      },
-      {
-        title: "HeroBois",
-        image: "/HeroBois.png",
-        description: "An educational math-based game.",
-        shortTalk: "A fun game designed to improve skill in rouge-like games",
-        video: "https://www.youtube.com/embed/MbqKK-7Fmko",
-      },
-      {
-        title: "VR Experiment",
-        image: "/VrGame.png",
-        description: "A virtual reality game experiment.",
-        shortTalk:
-          "Exploring the future of gaming with VR, providing an immersive experience.",
-        video: "https://www.youtube.com/embed/k0ZGAGonSXU",
-      },
-    ],
-  },
-  {
-    category: "Web Development",
-    projects: [
-      {
-        title: "AZ Mirror",
-        image: "/AZMirror.png",
-        description: "3D model viewer for startups.",
-        shortTalk:
-          "A web app that allows users to preview and interact with 3D models in real time.",
-        video: "https://www.youtube.com/embed/example-video",
-      },
-      {
-        title: "Trading Reward",
-        image: "/TradingReward.png",
-        description: "A web platform for tracking rewards.",
-        shortTalk:
-          "Helping businesses manage and track their customer reward programs efficiently.",
-        video: "",
-      },
-    ],
-  },
-  {
-    category: "Mobile Applications",
-    projects: [
-      {
-        title: "TrackIt",
-        image: "/TrackIt.png",
-        description: "A mobile app for tracking expenses.",
-        shortTalk: "A simple and intuitive app for managing personal finances.",
-        video: "https://www.youtube.com/embed/7nfjNrI96BA",
-      },
-    ],
-  },
-];
+const { data: projects } = await useFetch("/api/projects");
+
+const projectCategories = computed(() => {
+  const groups: Record<string, any[]> = {};
+  if (projects.value) {
+    for (const project of projects.value as any[]) {
+      if (!groups[project.category]) {
+        groups[project.category] = [];
+      }
+      groups[project.category].push(project);
+    }
+  }
+  return Object.entries(groups).map(([category, projects]) => ({
+    category,
+    projects,
+  }));
+});
 
 // Store the currently selected project for the modal
 const selectedProject = ref(null);
