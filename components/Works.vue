@@ -4,13 +4,11 @@
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
       <!-- Work Experience -->
-      <div
-        class="bg-black/20 p-6 rounded-lg shadow-lg border border-gray-600 backdrop-blur-lg md:col-span-1"
-      >
+      <div class="bg-black/20 p-6 rounded-lg shadow-lg border border-gray-600 backdrop-blur-lg md:col-span-1">
         <h3 class="text-xl font-semibold text-gray-100">Company Experiences</h3>
-        <div class="mt-4 space-y-4">
-          <p class="text-gray-400">Error 404 Not Found</p>
-        </div>
+        <ClientOnly>
+          <ExperienceList />
+        </ClientOnly>
       </div>
 
       <!-- Learning Projects -->

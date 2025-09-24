@@ -1,113 +1,47 @@
-<script setup>
-import { ref } from "vue";
+<script setup lang="ts">
+import { ref, computed } from "vue";
+import { useProjects } from "~/composables/usePortfolio";
 
-const projectCategories = [
-  {
-    category: "Game Development",
-    projects: [
-      {
-        title: "12TailsOnline Server",
-        image: "/12TailsOnline/12TailsPoster.jpg",
-        description: "A multiplayer online game server.",
-        shortTalk:
-          "Hi there! I'm just developing a game server for 12TailsOnline for learning something new, and I'm loving this game since it published in 2011. I never find the game make me fun and happy like this game. So I decided to make a server for this game. I hope it will be the Dream server for every one because I developed it with my love <3.",
-        video: "https://www.youtube.com/embed/P8xABk6rdns",
-        images: [
-          "/12TailsOnline/1.png",
-          "/12TailsOnline/2.png",
-          "/12TailsOnline/3.png",
-          "/12TailsOnline/4.png",
-          "/12TailsOnline/5.png",
-        ],
-      },
-      {
-        title: "HeroBois",
-        image: "/HeroBois.png",
-        description: "An educational math-based game.",
-        shortTalk: "A fun game designed to improve skill in rouge-like games",
-        video: "https://www.youtube.com/embed/MbqKK-7Fmko",
-      },
-      {
-        title: "VR Experiment",
-        image: "/VrGame.png",
-        description: "A virtual reality game experiment.",
-        shortTalk:
-          "Exploring the future of gaming with VR, providing an immersive experience.",
-        video: "https://www.youtube.com/embed/k0ZGAGonSXU",
-      },
-    ],
-  },
-  {
-    category: "Web Development",
-    projects: [
-      {
-        title: "AZ Mirror",
-        image: "/AZMirror.png",
-        description: "3D model viewer for startups.",
-        shortTalk:
-          "A web app that allows users to preview and interact with 3D models in real time.",
-        video: "https://www.youtube.com/embed/example-video",
-      },
-      {
-        title: "Trading Reward",
-        image: "/TradingReward.png",
-        description: "A web platform for tracking rewards.",
-        shortTalk:
-          "Helping businesses manage and track their customer reward programs efficiently.",
-        video: "",
-      },
-    ],
-  },
-  {
-    category: "Mobile Applications",
-    projects: [
-      {
-        title: "TrackIt",
-        image: "/TrackIt.png",
-        description: "A mobile app for tracking expenses.",
-        shortTalk: "A simple and intuitive app for managing personal finances.",
-        video: "https://www.youtube.com/embed/7nfjNrI96BA",
-      },
-    ],
-  },
-];
+const { byCategory, pending, error } = useProjects();
 
 // Store the currently selected project for the modal
-const selectedProject = ref(null);
-const openModal = (project) => {
+const selectedProject = ref<any | null>(null);
+const openModal = (project: any) => {
   selectedProject.value = project;
 };
 
 const closeModal = () => {
   selectedProject.value = null;
+  selectedImage.value = null;
+  currentImageIndex.value = 0;
 };
 
-// ** Image Lightbox Variables **
-const selectedImage = ref(null);
+// Image Lightbox Variables
+const selectedImage = ref<string | null>(null);
 const currentImageIndex = ref(0);
 
-// Handle opening an image in the slider
-const openImage = (image, index) => {
+const hasImages = computed(
+  () => selectedProject.value && Array.isArray(selectedProject.value.images) && selectedProject.value.images.length > 0
+);
+
+const openImage = (image: string, index: number) => {
   selectedImage.value = image;
   currentImageIndex.value = index;
 };
 
-// Handle next image in the slider
 const nextImage = () => {
-  if (selectedProject.value) {
+  if (hasImages.value) {
     currentImageIndex.value =
-      (currentImageIndex.value + 1) % selectedProject.value.images.length;
-    selectedImage.value = selectedProject.value.images[currentImageIndex.value];
+      (currentImageIndex.value + 1) % (selectedProject.value!.images!.length as number);
+    selectedImage.value = selectedProject.value!.images![currentImageIndex.value] as string;
   }
 };
 
-// Handle previous image in the slider
 const prevImage = () => {
-  if (selectedProject.value) {
-    currentImageIndex.value =
-      (currentImageIndex.value - 1 + selectedProject.value.images.length) %
-      selectedProject.value.images.length;
-    selectedImage.value = selectedProject.value.images[currentImageIndex.value];
+  if (hasImages.value) {
+    const len = selectedProject.value!.images!.length as number;
+    currentImageIndex.value = (currentImageIndex.value - 1 + len) % len;
+    selectedImage.value = selectedProject.value!.images![currentImageIndex.value] as string;
   }
 };
 </script>
@@ -116,11 +50,10 @@ const prevImage = () => {
   <section class="container mx-auto py-12 px-6 text-white max-w-5xl">
     <h2 class="text-5xl font-bold text-center mb-8 py-16">My Works</h2>
 
-    <div
-      v-for="category in projectCategories"
-      :key="category.category"
-      class="mb-12"
-    >
+    <div v-if="pending" class="text-center text-gray-400 py-16">Loading projects...</div>
+    <div v-else-if="error" class="text-center text-red-400 py-16">Failed to load projects. Check Supabase config.</div>
+
+    <div v-else v-for="category in byCategory" :key="category.category" class="mb-12">
       <h3 class="text-3xl font-semibold mb-6 border-b-2 border-gray-500 pb-2">
         {{ category.category }}
       </h3>
@@ -136,9 +69,7 @@ const prevImage = () => {
           <div class="p-4 flex flex-col justify-between h-full">
             <div>
               <h4 class="text-xl font-bold">{{ project.title }}</h4>
-              <p class="text-gray-400 text-sm mt-2">
-                {{ project.description }}
-              </p>
+              <p class="text-gray-400 text-sm mt-2">{{ project.description }}</p>
             </div>
             <button
               class="text-green-400 hover:underline mt-2 text-sm text-right block"
@@ -178,7 +109,7 @@ const prevImage = () => {
                 class="mb-10 w-full md:w-1/2 relative"
               >
                 <iframe
-                  v-if="selectedProject.video.includes('youtube.com')"
+                  v-if="selectedProject.video && selectedProject.video.includes('youtube.com')"
                   :src="selectedProject.video"
                   class="w-full h-60 rounded-lg"
                   frameborder="0"
@@ -187,7 +118,7 @@ const prevImage = () => {
                   allowfullscreen
                 ></iframe>
 
-                <video v-else controls class="w-full h-52 rounded-lg">
+                <video v-else-if="selectedProject.video" controls class="w-full h-52 rounded-lg">
                   <source :src="selectedProject.video" type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
@@ -196,19 +127,16 @@ const prevImage = () => {
               <div class="flex flex-col w-full md:w-1/2 py-16">
                 <!-- Short Talk -->
                 <p
-                  v-if="selectedProject.shortTalk"
+                  v-if="selectedProject.short_talk"
                   class="text-1xl text-gray-400 bold text-center mb-4 items-center"
                 >
-                  "{{ selectedProject.shortTalk }}"
+                  "{{ selectedProject.short_talk }}"
                 </p>
               </div>
             </div>
 
             <!-- Animated Image Gallery with Slider -->
-            <div
-              v-if="selectedProject.images && selectedProject.images.length > 0"
-              class="relative flex flex-col items-center mt-6"
-            >
+            <div v-if="hasImages" class="relative flex flex-col items-center mt-6">
               <!-- Main Large Image View with Animation -->
               <div class="relative w-full max-w-3xl h-96 overflow-hidden">
                 <transition name="fade-slide" mode="out-in">

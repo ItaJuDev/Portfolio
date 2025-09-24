@@ -1,92 +1,11 @@
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
+import { useSkills } from "~/composables/usePortfolio";
 
 const activeTab = ref("frontend");
+const { grouped, pending, error } = useSkills();
 
-const skills = {
-  frontend: [
-    {
-      name: "Flutter",
-      icon: "flutter",
-      description: "Flutter is used to develop mobile applications.",
-    },
-    {
-      name: "Vue.js",
-      icon: "vue",
-      description: "Vue.js is a JavaScript framework for building UI.",
-    },
-    {
-      name: "JavaScript",
-      icon: "js",
-      description: "JavaScript is a programming language for the web.",
-    },
-  ],
-  backend: [
-    {
-      name: "Python",
-      icon: "python",
-      description:
-        "Python is a powerful, versatile programming language used for backend development, automation, data science, and AI. ",
-    },
-    {
-      name: "Node.js",
-      icon: "nodejs",
-      description: "Node.js is a JavaScript runtime for servers.",
-    },
-    {
-      name: "Bun",
-      icon: "bun",
-      description: "Bun is a fast JavaScript runtime.",
-    },
-    {
-      name: "MongoDB",
-      icon: "mongodb",
-      description: "MongoDB is a NoSQL database.",
-    },
-    {
-      name: ".NET",
-      icon: "dotnet",
-      description: ".NET is a framework for building apps.",
-    },
-  ],
-  others: [
-    {
-      name: "Docker",
-      icon: "docker",
-      description: "Docker is a containerization platform.",
-    },
-    {
-      name: "Git",
-      icon: "git",
-      description: "Git is a version control system.",
-    },
-    {
-      name: "Unity",
-      icon: "unity",
-      description: "Unity is a game development engine.",
-    },
-    {
-      name: "GitHub",
-      icon: "github",
-      description: "GitHub is a code hosting platform.",
-    },
-    {
-      name: "VSCode",
-      icon: "vscode",
-      description: "VS Code is a code editor by Microsoft.",
-    },
-    {
-      name: "VisualStudio",
-      icon: "visualstudio",
-      description: "Visual Studio is an IDE for development.",
-    },
-    {
-      name: "Notion",
-      icon: "notion",
-      description: "Notion is a project management tool.",
-    },
-  ],
-};
+const currentSkills = computed(() => grouped.value?.[activeTab.value] || []);
 </script>
 
 <template>
@@ -138,13 +57,13 @@ const skills = {
       <div class="w-full max-w-3xl relative">
         <transition name="fade-scale" mode="out-in">
           <div
-            v-if="skills[activeTab]"
+            v-if="!pending && !error"
             :key="activeTab"
             class="flex flex-wrap justify-center gap-4 bg-black/20 p-6 rounded-lg shadow-lg"
           >
             <div
-              v-for="skill in skills[activeTab]"
-              :key="skill.name"
+              v-for="skill in currentSkills"
+              :key="skill.id || skill.name"
               class="relative group flex flex-col items-center"
             >
               <!-- Skill Info (Above Icon) -->
@@ -156,12 +75,18 @@ const skills = {
 
               <!-- Enlarging Skill Icon on Hover -->
               <img
-                :src="`https://skillicons.dev/icons?i=${skill.icon}`"
+                :src="`https://skillicons.dev/icons?i=${skill.icon || ''}`"
                 class="w-12 h-12 transition-transform duration-300 group-hover:scale-125"
               />
             </div>
           </div>
         </transition>
+        <div v-if="pending" class="text-center text-gray-400 py-8">
+          Loading skills...
+        </div>
+        <div v-if="error" class="text-center text-red-400 py-8">
+          Failed to load skills. Check Supabase config.
+        </div>
       </div>
     </div>
   </div>
