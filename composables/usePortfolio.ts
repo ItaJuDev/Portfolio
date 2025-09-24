@@ -31,6 +31,16 @@ type Experience = {
   order_index?: number | null;
 };
 
+type Contact = {
+  id: number;
+  label?: string | null; // Display name e.g., LinkedIn
+  type?: string | null; // linkedin, github, email, custom
+  url?: string | null; // https/mailto link
+  icon?: string | null; // skillicons id or absolute URL
+  order_index?: number | null;
+  active?: boolean | null; // filter visible links
+};
+
 export function useSkills() {
   const { $supabase } = useNuxtApp();
   const enabled = Boolean($supabase);
@@ -47,7 +57,7 @@ export function useSkills() {
       if (error) throw error;
       return (data || []) as Skill[];
     },
-    { server: false, immediate: enabled }
+    { server: false, immediate: enabled },
   );
 
   const grouped = computed(() => {
@@ -82,7 +92,7 @@ export function useProjects() {
         images: Array.isArray(p?.images) ? p.images : p?.images ? [p.images] : [],
       })) as Project[];
     },
-    { server: false, immediate: enabled }
+    { server: false, immediate: enabled },
   );
 
   const byCategory = computed(() => {
@@ -114,9 +124,30 @@ export function useExperiences() {
       if (error) throw error;
       return (data || []) as Experience[];
     },
-    { server: false, immediate: enabled }
+    { server: false, immediate: enabled },
   );
 
   return { experiences: data, pending, error, refresh };
 }
 
+export function useContacts() {
+  const { $supabase } = useNuxtApp();
+  const enabled = Boolean($supabase);
+
+  const { data, pending, error, refresh } = useAsyncData(
+    "contacts",
+    async () => {
+      if (!$supabase) return [] as Contact[];
+      const { data, error } = await $supabase
+        .from("contacts")
+        .select("id, label, type, url, icon, order_index, active")
+        .order("order_index", { ascending: true, nullsFirst: true })
+        .order("label", { ascending: true });
+      if (error) throw error;
+      return (data || []).filter((c: any) => c.active !== false) as Contact[];
+    },
+    { server: false, immediate: enabled },
+  );
+
+  return { contacts: data, pending, error, refresh };
+}

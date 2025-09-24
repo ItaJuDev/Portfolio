@@ -1,80 +1,52 @@
+<script setup>
+import { computed } from "vue";
+import { useContacts } from "~/composables/usePortfolio";
+
+const { contacts, pending, error } = useContacts();
+
+const items = computed(() => contacts.value || []);
+
+const iconUrl = (icon, type) => {
+  const src = icon || type || "link";
+  if (!src) return "https://skillicons.dev/icons?i=link";
+  if (/^https?:\/\//.test(src)) return src; // absolute URL
+  return `https://skillicons.dev/icons?i=${encodeURIComponent(src)}`;
+};
+</script>
+
 <template>
   <div class="relative flex flex-col gap-6 py-16 w-full max-w-5xl mx-auto">
-    <!-- Title & Description (Aligned Left) -->
     <h2 class="text-5xl font-bold text-white">Contact</h2>
     <p class="text-gray-400 text-left">I would like to work with you...</p>
 
-    <!-- Contact Links (Centered) -->
     <div class="w-full grid grid-cols-1 md:grid-cols-2 gap-4 justify-center">
-      <!-- LinkedIn -->
-      <a
-        href="https://www.linkedin.com/in/vitit-charubencharat/"
-        target="_blank"
-        class="contact-box"
-      >
-        <div class="flex items-center justify-between w-full">
-          <div class="flex items-center space-x-4">
-            <img
-              src="https://skillicons.dev/icons?i=linkedin"
-              alt="LinkedIn"
-              class="w-8 h-8"
-            />
-            <p class="text-lg font-semibold text-white">LinkedIn</p>
+      <div v-if="pending" class="text-gray-400">Loading contacts...</div>
+      <div v-else-if="error" class="text-red-400">Failed to load contacts.</div>
+      <template v-else>
+        <a
+          v-for="c in items"
+          :key="c.id"
+          :href="c.url || '#'"
+          target="_blank"
+          class="contact-box"
+        >
+          <div class="flex items-center justify-between w-full">
+            <div class="flex items-center space-x-4">
+              <img :src="iconUrl(c.icon, c.type)" :alt="c.label || c.type || 'contact'" class="w-8 h-8" />
+              <p class="text-lg font-semibold text-white">{{ c.label || c.type || 'Contact' }}</p>
+            </div>
+            <span class="arrow">→</span>
           </div>
-          <span class="arrow">→</span>
-        </div>
-      </a>
+        </a>
 
-      <!-- Gmail -->
-      <a href="mailto:vitit.charubencharat@gmail.com" class="contact-box">
-        <div class="flex items-center justify-between w-full">
-          <div class="flex items-center space-x-4">
-            <img
-              src="https://skillicons.dev/icons?i=gmail"
-              alt="Gmail"
-              class="w-8 h-8"
-            />
-            <p class="text-lg font-semibold text-white">Gmail</p>
-          </div>
-          <span class="arrow">→</span>
+        <!-- Optional empty-state fallback if table has no rows -->
+        <div v-if="items.length === 0" class="text-gray-400">
+          No contact links yet.
         </div>
-      </a>
-
-      <!-- GitHub -->
-      <a href="https://github.com/ItaJuDev" target="_blank" class="contact-box">
-        <div class="flex items-center justify-between w-full">
-          <div class="flex items-center space-x-4">
-            <img
-              src="https://skillicons.dev/icons?i=github"
-              alt="GitHub"
-              class="w-8 h-8"
-            />
-            <p class="text-lg font-semibold text-white">GitHub</p>
-          </div>
-          <span class="arrow">→</span>
-        </div>
-      </a>
-
-      <!-- Discord -->
-      <a
-        href="https://discord.com/users/408995873587068928"
-        target="_blank"
-        class="contact-box"
-      >
-        <div class="flex items-center justify-between w-full">
-          <div class="flex items-center space-x-4">
-            <img
-              src="https://skillicons.dev/icons?i=discord"
-              alt="Discord"
-              class="w-8 h-8"
-            />
-            <p class="text-lg font-semibold text-white">Discord</p>
-          </div>
-          <span class="arrow">→</span>
-        </div>
-      </a>
+      </template>
     </div>
   </div>
+  
 </template>
 
 <style>
