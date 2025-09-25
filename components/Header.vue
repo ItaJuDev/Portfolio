@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from "vue";
-const links = [{ name: "Projects", path: "/projects" }];
+const links = [{ name: "projects", path: "/projects" }];
 const isVisible = ref(true);
 let lastScrollY = 0;
 
@@ -30,20 +30,12 @@ onUnmounted(() => {
     ]"
   >
     <!-- Left: Logo -->
-    <NuxtLink
-      to="/"
-      class="text-lg font-bold text-blue-400 hover:text-gray-100 transition"
-    >
-      junior.
-    </NuxtLink>
+    <NuxtLink to="/" class="text-lg font-bold text-blue-400 transition hover:text-gray-100"> junior. </NuxtLink>
 
     <!-- Right: Navigation Links -->
     <ul class="flex space-x-4">
       <li v-for="link in links" :key="link.name">
-        <NuxtLink
-          :to="link.path"
-          class="text-gray-300 hover:text-white transition font-medium"
-        >
+        <NuxtLink :to="link.path" class="font-medium text-gray-300 transition hover:text-white">
           {{ link.name }}
         </NuxtLink>
       </li>

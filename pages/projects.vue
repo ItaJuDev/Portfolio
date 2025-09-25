@@ -2,7 +2,31 @@
 import { ref, computed } from "vue";
 import { useProjects } from "~/composables/usePortfolio";
 
-const { byCategory, pending, error } = useProjects();
+const { projects, byCategory, pending, error } = useProjects();
+
+// Category filter
+const selectedCategory = ref<string>("All");
+const categories = computed(() => {
+  const set = new Set<string>();
+  for (const p of projects.value || []) {
+    const cat = (p.category || "Uncategorized").trim();
+    if (cat) set.add(cat);
+  }
+  return ["All", ...Array.from(set).sort()];
+});
+
+const filteredProjects = computed(() => {
+  const list = projects.value || [];
+  if (selectedCategory.value === "All") return list;
+  return list.filter((p: any) => (p.category || "Uncategorized").trim() === selectedCategory.value);
+});
+
+// Open modal focused on video (if present)
+const openVideo = (project: any) => {
+  selectedProject.value = project;
+  // Ensure first slide is video if available (our gallery places video first)
+  currentImageIndex.value = 0;
+};
 
 // Store the currently selected project for the modal
 const selectedProject = ref<any | null>(null);
@@ -63,68 +87,110 @@ const goToImage = (index: number) => {
 
 <template>
   <section class="container max-w-5xl px-6 py-12 mx-auto text-white">
-    <h2 class="py-16 mb-8 text-5xl font-bold text-center">My Works</h2>
+    <h2 class="py-16 mb-8 text-5xl font-bold text-center">What I’ve Built</h2>
 
     <div v-if="pending" class="py-8">
       <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         <div v-for="i in 6" :key="i" class="p-4 rounded-2xl bg-white/5 ring-1 ring-white/10 animate-pulse">
           <div class="w-full h-48 mb-4 bg-white/10 rounded-xl"></div>
-          <div class="h-5 mb-2 bg-white/10 rounded"></div>
-          <div class="h-4 bg-white/10 rounded w-2/3"></div>
+          <div class="h-5 mb-2 rounded bg-white/10"></div>
+          <div class="w-2/3 h-4 rounded bg-white/10"></div>
         </div>
       </div>
     </div>
     <div v-else-if="error" class="py-16 text-center text-red-400">Failed to load projects. Check Supabase config.</div>
 
-    <div v-else v-for="category in byCategory" :key="category.category" class="mb-12">
-      <h3 class="pb-2 mb-6 text-3xl font-semibold border-b-2 border-gray-500">
-        {{ category.category }}
-      </h3>
+    <div v-else>
+      <!-- Filter bar -->
+      <div class="flex flex-wrap items-center justify-center gap-2 mb-8">
+        <button
+          v-for="cat in categories"
+          :key="cat"
+          @click="selectedCategory = cat"
+          class="px-3 py-1 text-sm transition rounded-full ring-1 ring-white/10"
+          :class="selectedCategory === cat ? 'bg-white/15 text-white' : 'bg-white/5 text-white/80 hover:bg-white/10'"
+        >
+          {{ cat }}
+        </button>
+      </div>
 
       <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         <div
-          v-for="project in category.projects"
+          v-for="project in filteredProjects"
           :key="project.title"
-          class="relative overflow-hidden cursor-pointer group"
+          class="relative h-full overflow-hidden hover-box"
           @click="openModal(project)"
         >
-          <!-- Decorative gradient border wrapper -->
-          <div class="absolute inset-0 rounded-2xl bg-gradient-to-br from-teal-400/20 via-blue-400/10 to-purple-500/20 opacity-0 group-hover:opacity-100 transition" />
+          <!-- class="flex flex-col block h-full p-4 transition-all rounded-lg cursor-pointer hover-box" -->
 
-          <div class="relative p-0.5 rounded-2xl ring-1 ring-white/10 bg-white/5 backdrop-blur-sm">
-            <div class="relative overflow-hidden rounded-[1rem]">
-              <img
-                :src="project.image"
-                alt="Project image"
-                class="object-cover w-full h-48 transition duration-500 scale-100 group-hover:scale-105"
-              />
+          <div class="relative overflow-hidden rounded-[1rem]">
+            <img
+              :src="project.image"
+              alt="Project image"
+              class="object-cover w-full h-56 transition duration-500 scale-100 group-hover:scale-105"
+            />
 
-              <!-- Top-right video badge if project has video -->
-              <div v-if="project.video" class="absolute px-2 py-1 text-xs rounded-full top-2 right-2 bg-black/60 backdrop-blur text-white">
-                <i class="mr-1 fas fa-play"></i> Video
-              </div>
+            <!-- Top row: category -->
+            <div class="absolute flex items-center gap-2 top-3 left-3">
+              <span
+                v-if="project.category"
+                class="px-2 py-1 text-[11px] rounded-full bg-black/50 text-white/90 ring-1 ring-white/10"
+              >
+                {{ project.category }}
+              </span>
+            </div>
 
-              <!-- Bottom gradient overlay -->
-              <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/70 to-transparent" />
-
-              <!-- Content -->
-              <div class="absolute inset-x-0 bottom-0 p-4">
-                <h4 class="text-lg font-semibold">{{ project.title }}</h4>
-                <p class="mt-1 text-sm text-gray-300 line-clamp-2">{{ project.description }}</p>
-
-                <div class="flex items-center justify-end mt-3">
-                  <span
-                    class="inline-flex items-center gap-1 text-sm text-teal-300/90 group-hover:text-teal-200 transition"
-                  >
-                    View Details <i class="text-xs fas fa-arrow-right"></i>
-                  </span>
-                </div>
-              </div>
+            <!-- Decorative bottom gradient only -->
+            <div
+              class="absolute inset-x-0 bottom-0 h-16 pointer-events-none bg-gradient-to-t from-black/50 via-black/20 to-transparent"
+            ></div>
+          </div>
+          <!-- Text content below image for better readability -->
+          <div class="flex flex-col flex-1 p-4">
+            <h4 class="text-lg font-semibold line-clamp-1">{{ project.title }}</h4>
+            <p class="mt-1 text-sm text-gray-300 line-clamp-2 min-h-[2.5rem]">
+              {{ project.description }}
+            </p>
+            <!-- Tags row under description -->
+            <div class="flex flex-wrap items-center gap-2 pt-2 mt-auto">
+              <a
+                v-if="project.publish_link"
+                :href="project.publish_link"
+                target="_blank"
+                rel="noopener noreferrer"
+                @click.stop
+                class="inline-flex items-center gap-1 px-2.5 py-1 text-xs rounded-full bg-white/5 hover:bg-white/10 ring-1 ring-white/10 text-white/90 transition transform hover:scale-105 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/50"
+              >
+                <i class="fas fa-arrow-up-right-from-square"></i>
+                Live
+              </a>
+              <a
+                v-if="project.project_link"
+                :href="project.project_link"
+                target="_blank"
+                rel="noopener noreferrer"
+                @click.stop
+                class="inline-flex items-center gap-1 px-2.5 py-1 text-xs rounded-full bg-white/5 hover:bg-white/10 ring-1 ring-white/10 text-white/90 transition transform hover:scale-105 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/50"
+              >
+                <i class="fab fa-github"></i>
+                GitHub
+              </a>
+              <button
+                v-if="project.video"
+                type="button"
+                @click.stop="openVideo(project)"
+                class="inline-flex items-center gap-1 px-2.5 py-1 text-xs rounded-full bg-white/5 hover:bg-white/10 ring-1 ring-white/10 text-white/90 transition transform hover:scale-105 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/50"
+                aria-label="Watch video"
+              >
+                <i class="fas fa-play"></i>
+                Video
+              </button>
             </div>
           </div>
         </div>
       </div>
     </div>
+    <p v-if="filteredProjects.length === 0" class="mt-8 text-center text-gray-400">No projects in this category.</p>
 
     <!-- Full Page Modal for Project Details -->
     <transition name="fade-scale">
@@ -223,10 +289,6 @@ const goToImage = (index: number) => {
                 </button>
               </div>
             </div>
-
-            <p class="max-w-3xl mx-auto mt-6 text-center text-gray-300">
-              {{ selectedProject.description }}
-            </p>
           </div>
         </transition>
       </div>

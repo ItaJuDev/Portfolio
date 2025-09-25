@@ -19,6 +19,8 @@ type Project = {
   short_talk?: string | null;
   category?: string | null;
   order_index?: number | null;
+  project_link?: string | null;
+  publish_link?: string | null;
 };
 
 type Experience = {

@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
   const { data, error } = await supabase
     .from("projects")
     .select(
-      "id, title, description, image, images, video, short_talk, category, order_index",
+      "id, title, description, image, images, video, short_talk, category, order_index, project_link, publish_link",
     )
     .order("order_index", { ascending: true, nullsFirst: true })
     .order("title", { ascending: true });
@@ -29,6 +29,8 @@ export default defineEventHandler(async (event) => {
       ...p,
       image: toUrl(p?.image) || images[0] || null,
       video: toUrl(p?.video) || null,
+      project_link: toUrl(p?.project_link) || null,
+      publish_link: toUrl(p?.publish_link) || null,
       images,
     };
   });

@@ -1,25 +1,25 @@
 <template>
-  <div class="container mx-auto py-16">
-    <h2 class="text-5xl font-bold mb-8 text-white">Works</h2>
+  <div class="container py-16 mx-auto">
+    <h2 class="mb-8 text-5xl font-bold text-white">Works</h2>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
       <!-- Work Experience -->
-      <div class="bg-black/20 p-6 rounded-lg shadow-lg border border-gray-600 backdrop-blur-lg md:col-span-1">
+      <div class="p-6 border border-gray-600 rounded-lg shadow-lg bg-black/20 backdrop-blur-lg md:col-span-1">
         <h3 class="text-xl font-semibold text-gray-100">Company Experiences</h3>
         <ExperienceList />
       </div>
 
       <!-- Learning Projects -->
       <div
-        class="bg-black/20 p-6 rounded-lg shadow-lg border border-gray-600 backdrop-blur-lg md:col-span-2 flex flex-col"
+        class="flex flex-col p-6 border border-gray-600 rounded-lg shadow-lg bg-black/20 backdrop-blur-lg md:col-span-2"
       >
-        <div class="flex justify-between items-center">
+        <div class="flex items-center justify-between">
           <h3 class="text-xl font-semibold text-gray-100">Learning Projects</h3>
 
           <!-- More Work Button (Navigate to /projects) -->
           <button
             @click="$router.push('/projects')"
-            class="text-sm text-blue-400 hover:underline flex items-center gap-1"
+            class="flex items-center gap-1 text-sm text-blue-400 hover:underline"
           >
             More Work →
           </button>
@@ -28,30 +28,17 @@
         <div class="mt-4 space-y-4">
           <!-- TrackIt -->
           <a href="https://github.com/ItaJuDev/TrackIt" class="block hover-box">
-            <div class="p-4 rounded-lg transition-all">
+            <div class="p-4 transition-all rounded-lg">
               <p class="font-bold text-gray-200">TrackIt</p>
-              <p class="text-gray-400 text-sm">
-                A simple Flutter app to track income & expenses with a simple
-                UI.
-              </p>
-              <div class="flex space-x-2 mt-2">
-                <span
-                  class="bg-blue-500 px-2 py-1 text-xs rounded-full flex items-center gap-1"
-                >
-                  <img
-                    src="https://skillicons.dev/icons?i=flutter"
-                    class="h-4 w-4"
-                  />
+              <p class="text-sm text-gray-400">A simple Flutter app to track income & expenses with a simple UI.</p>
+              <div class="flex mt-2 space-x-2">
+                <span class="flex items-center gap-1 px-2 py-1 text-xs bg-blue-500 rounded-full">
+                  <img src="https://skillicons.dev/icons?i=flutter" class="w-4 h-4" />
                   Flutter
                 </span>
 
-                <span
-                  class="bg-blue-400 px-2 py-1 text-xs rounded-full flex items-center gap-1"
-                >
-                  <img
-                    src="https://skillicons.dev/icons?i=dart"
-                    class="h-4 w-4"
-                  />
+                <span class="flex items-center gap-1 px-2 py-1 text-xs bg-blue-400 rounded-full">
+                  <img src="https://skillicons.dev/icons?i=dart" class="w-4 h-4" />
                   Dart
                 </span>
               </div>
@@ -59,23 +46,13 @@
           </a>
 
           <!-- AZ Mirror -->
-          <a
-            href="https://github.com/ItaJuDev/AZMirror"
-            class="block hover-box"
-          >
-            <div class="p-4 rounded-lg transition-all">
+          <a href="https://github.com/ItaJuDev/AZMirror" class="block hover-box">
+            <div class="p-4 transition-all rounded-lg">
               <p class="font-bold text-gray-200">AZ Mirror - JavaScript</p>
-              <p class="text-gray-400 text-sm">
-                A JavaScript app for showing the 3D model for startup business.
-              </p>
-              <div class="flex space-x-2 mt-2">
-                <span
-                  class="bg-yellow-600 px-2 py-1 text-xs rounded-full flex items-center gap-1"
-                >
-                  <img
-                    src="https://skillicons.dev/icons?i=javascript"
-                    class="h-4 w-4"
-                  />
+              <p class="text-sm text-gray-400">A JavaScript app for showing the 3D model for startup business.</p>
+              <div class="flex mt-2 space-x-2">
+                <span class="flex items-center gap-1 px-2 py-1 text-xs bg-yellow-600 rounded-full">
+                  <img src="https://skillicons.dev/icons?i=javascript" class="w-4 h-4" />
                   JavaScript
                 </span>
               </div>
