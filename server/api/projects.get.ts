@@ -1,13 +1,22 @@
-import { defineEventHandler, setHeader, createError } from "h3";
+import { defineEventHandler, setHeader, createError, getQuery } from "h3";
 import { serverSupabase } from "~/server/utils/supabase";
 
 export default defineEventHandler(async (event) => {
   const supabase = serverSupabase();
-  const { data, error } = await supabase
+  const { category } = getQuery(event) as { category?: string };
+
+  let query = supabase
     .from("projects")
     .select(
       "id, title, description, image, images, video, short_talk, category, order_index, project_link, publish_link",
-    )
+    );
+
+  const cat = (category || "").toString().trim();
+  if (cat && cat.toUpperCase() !== "ALL") {
+    query = query.eq("category", cat);
+  }
+
+  const { data, error } = await query
     .order("order_index", { ascending: true, nullsFirst: true })
     .order("title", { ascending: true });
 

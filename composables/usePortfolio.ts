@@ -1,4 +1,4 @@
-import { computed } from "vue";
+import { computed, unref, type Ref } from "vue";
 
 type Skill = {
   id: number;
@@ -62,11 +62,18 @@ export function useSkills() {
   return { skills: data, grouped, pending, error, refresh };
 }
 
-export function useProjects() {
+export function useProjects(category?: Ref<string> | string) {
+  const catRef = computed(() => {
+    const v = unref(category as any) as string | undefined;
+    return (v ?? "ALL").toString();
+  });
+
   const { data, pending, error, refresh } = useFetch<Project[]>("/api/projects", {
-    key: "projects",
+    key: () => `projects:${catRef.value}`,
+    query: computed(() => (catRef.value === "ALL" ? {} : { category: catRef.value })),
     server: true,
     default: () => [],
+    watch: [catRef],
   });
 
   const byCategory = computed(() => {

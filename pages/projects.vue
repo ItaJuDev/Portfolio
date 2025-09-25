@@ -1,25 +1,14 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import { useProjects } from "~/composables/usePortfolio";
+import { categories } from "~/composables/useCategories";
 
-const { projects, byCategory, pending, error } = useProjects();
+// Category filter (enum values)
+const selectedCategory = ref<string>("ALL");
+const labelByValue: Record<string, string> = Object.fromEntries(categories.map((c) => [c.value, c.label]));
 
-// Category filter
-const selectedCategory = ref<string>("All");
-const categories = computed(() => {
-  const set = new Set<string>();
-  for (const p of projects.value || []) {
-    const cat = (p.category || "Uncategorized").trim();
-    if (cat) set.add(cat);
-  }
-  return ["All", ...Array.from(set).sort()];
-});
-
-const filteredProjects = computed(() => {
-  const list = projects.value || [];
-  if (selectedCategory.value === "All") return list;
-  return list.filter((p: any) => (p.category || "Uncategorized").trim() === selectedCategory.value);
-});
+// Fetch filtered list via composable (queries server API under the hood)
+const { projects: filteredProjects, pending: listPending, error: listError, refresh } = useProjects(selectedCategory);
 
 // Open modal focused on video (if present)
 const openVideo = (project: any) => {
@@ -89,7 +78,7 @@ const goToImage = (index: number) => {
   <section class="container max-w-5xl px-6 py-12 mx-auto text-white">
     <h2 class="py-16 mb-8 text-5xl font-bold text-center">What I’ve Built</h2>
 
-    <div v-if="pending" class="py-8">
+    <div v-if="listPending" class="py-8">
       <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         <div v-for="i in 6" :key="i" class="p-4 rounded-2xl bg-white/5 ring-1 ring-white/10 animate-pulse">
           <div class="w-full h-48 mb-4 bg-white/10 rounded-xl"></div>
@@ -98,19 +87,23 @@ const goToImage = (index: number) => {
         </div>
       </div>
     </div>
-    <div v-else-if="error" class="py-16 text-center text-red-400">Failed to load projects. Check Supabase config.</div>
+    <div v-else-if="listError" class="py-16 text-center text-red-400">
+      Failed to load projects. Check Supabase config.
+    </div>
 
     <div v-else>
       <!-- Filter bar -->
-      <div class="flex flex-wrap items-center justify-center gap-2 mb-8">
+      <div class="flex flex-wrap items-center justify-center gap-2 mb-8 z-1">
         <button
-          v-for="cat in categories"
-          :key="cat"
-          @click="selectedCategory = cat"
+          v-for="c in categories"
+          :key="c.value"
+          @click="selectedCategory = c.value"
           class="px-3 py-1 text-sm transition rounded-full ring-1 ring-white/10"
-          :class="selectedCategory === cat ? 'bg-white/15 text-white' : 'bg-white/5 text-white/80 hover:bg-white/10'"
+          :class="
+            selectedCategory === c.value ? 'bg-white/15 text-white' : 'bg-white/5 text-white/80 hover:bg-white/10'
+          "
         >
-          {{ cat }}
+          {{ c.label }}
         </button>
       </div>
 
@@ -132,12 +125,14 @@ const goToImage = (index: number) => {
 
             <!-- Top row: category -->
             <div class="absolute flex items-center gap-2 top-3 left-3">
-              <span
+              <button
                 v-if="project.category"
-                class="px-2 py-1 text-[11px] rounded-full bg-black/50 text-white/90 ring-1 ring-white/10"
+                type="button"
+                @click.stop="selectedCategory = String(project.category)"
+                class="px-2 py-1 text-[11px] rounded-full bg-black/50 text-white/90 ring-1 ring-white/10 hover:bg-black/60"
               >
-                {{ project.category }}
-              </span>
+                {{ labelByValue[String(project.category)] || project.category }}
+              </button>
             </div>
 
             <!-- Decorative bottom gradient only -->
