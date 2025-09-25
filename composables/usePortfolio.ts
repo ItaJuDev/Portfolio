@@ -42,23 +42,11 @@ type Contact = {
 };
 
 export function useSkills() {
-  const { $supabase } = useNuxtApp();
-  const enabled = Boolean($supabase);
-
-  const { data, pending, error, refresh } = useAsyncData(
-    "skills",
-    async () => {
-      if (!$supabase) return [] as Skill[];
-      const { data, error } = await $supabase
-        .from("skills")
-        .select("id, name, icon, description, category, order_index")
-        .order("order_index", { ascending: true, nullsFirst: true })
-        .order("name", { ascending: true });
-      if (error) throw error;
-      return (data || []) as Skill[];
-    },
-    { server: false, immediate: enabled },
-  );
+  const { data, pending, error, refresh } = useFetch<Skill[]>("/api/skills", {
+    key: "skills",
+    server: true,
+    default: () => [],
+  });
 
   const grouped = computed(() => {
     const groups: Record<string, Skill[]> = { frontend: [], backend: [], others: [] };
@@ -73,27 +61,11 @@ export function useSkills() {
 }
 
 export function useProjects() {
-  const { $supabase } = useNuxtApp();
-  const enabled = Boolean($supabase);
-
-  const { data, pending, error, refresh } = useAsyncData(
-    "projects",
-    async () => {
-      if (!$supabase) return [] as Project[];
-      const { data, error } = await $supabase
-        .from("projects")
-        .select("id, title, description, image, images, video, short_talk, category, order_index")
-        .order("order_index", { ascending: true, nullsFirst: true })
-        .order("title", { ascending: true });
-      if (error) throw error;
-      // Ensure images is an array if stored as JSON
-      return (data || []).map((p: any) => ({
-        ...p,
-        images: Array.isArray(p?.images) ? p.images : p?.images ? [p.images] : [],
-      })) as Project[];
-    },
-    { server: false, immediate: enabled },
-  );
+  const { data, pending, error, refresh } = useFetch<Project[]>("/api/projects", {
+    key: "projects",
+    server: true,
+    default: () => [],
+  });
 
   const byCategory = computed(() => {
     const map = new Map<string, Project[]>();
@@ -109,45 +81,22 @@ export function useProjects() {
 }
 
 export function useExperiences() {
-  const { $supabase } = useNuxtApp();
-  const enabled = Boolean($supabase);
-
-  const { data, pending, error, refresh } = useAsyncData(
-    "experiences",
-    async () => {
-      if (!$supabase) return [] as Experience[];
-      const { data, error } = await $supabase
-        .from("experiences")
-        .select("id, company, role, start_date, end_date, description, order_index")
-        .order("order_index", { ascending: true, nullsFirst: true })
-        .order("start_date", { ascending: false });
-      if (error) throw error;
-      return (data || []) as Experience[];
-    },
-    { server: false, immediate: enabled },
-  );
+  // Fetch via server API with caching and SSR to avoid client-side delay
+  const { data, pending, error, refresh } = useFetch<Experience[]>("/api/experiences", {
+    key: "experiences",
+    server: true,
+    default: () => [],
+  });
 
   return { experiences: data, pending, error, refresh };
 }
 
 export function useContacts() {
-  const { $supabase } = useNuxtApp();
-  const enabled = Boolean($supabase);
-
-  const { data, pending, error, refresh } = useAsyncData(
-    "contacts",
-    async () => {
-      if (!$supabase) return [] as Contact[];
-      const { data, error } = await $supabase
-        .from("contacts")
-        .select("id, label, type, url, icon, order_index, active")
-        .order("order_index", { ascending: true, nullsFirst: true })
-        .order("label", { ascending: true });
-      if (error) throw error;
-      return (data || []).filter((c: any) => c.active !== false) as Contact[];
-    },
-    { server: false, immediate: enabled },
-  );
+  const { data, pending, error, refresh } = useFetch<Contact[]>("/api/contacts", {
+    key: "contacts",
+    server: true,
+    default: () => [],
+  });
 
   return { contacts: data, pending, error, refresh };
 }
