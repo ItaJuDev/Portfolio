@@ -8,40 +8,56 @@ const { byCategory, pending, error } = useProjects();
 const selectedProject = ref<any | null>(null);
 const openModal = (project: any) => {
   selectedProject.value = project;
+  // Initialize gallery state
+  currentImageIndex.value = 0;
 };
 
 const closeModal = () => {
   selectedProject.value = null;
-  selectedImage.value = null;
   currentImageIndex.value = 0;
 };
 
-// Image Lightbox Variables
-const selectedImage = ref<string | null>(null);
+// Media slider (images + optional video)
 const currentImageIndex = ref(0);
 
-const hasImages = computed(
-  () => selectedProject.value && Array.isArray(selectedProject.value.images) && selectedProject.value.images.length > 0,
-);
+type MediaItem = { type: "image" | "youtube" | "video"; src: string };
 
-const openImage = (image: string, index: number) => {
-  selectedImage.value = image;
-  currentImageIndex.value = index;
-};
+const gallery = computed<MediaItem[]>(() => {
+  const items: MediaItem[] = [];
+  const p = selectedProject.value as any | null;
+  if (!p) return items;
+  if (p.video) {
+    const v: string = p.video as string;
+    const isYouTube = v.includes("youtube.com") || v.includes("youtu.be");
+    items.push({ type: isYouTube ? "youtube" : "video", src: v });
+  }
+  if (Array.isArray(p.images)) {
+    for (const img of p.images) {
+      if (img) items.push({ type: "image", src: String(img) });
+    }
+  }
+  return items;
+});
+
+const hasMedia = computed(() => gallery.value.length > 0);
 
 const nextImage = () => {
-  if (hasImages.value) {
-    currentImageIndex.value = (currentImageIndex.value + 1) % (selectedProject.value!.images!.length as number);
-    selectedImage.value = selectedProject.value!.images![currentImageIndex.value] as string;
-  }
+  if (!hasMedia.value) return;
+  const len = gallery.value.length;
+  currentImageIndex.value = (currentImageIndex.value + 1) % len;
 };
 
 const prevImage = () => {
-  if (hasImages.value) {
-    const len = selectedProject.value!.images!.length as number;
-    currentImageIndex.value = (currentImageIndex.value - 1 + len) % len;
-    selectedImage.value = selectedProject.value!.images![currentImageIndex.value] as string;
-  }
+  if (!hasMedia.value) return;
+  const len = gallery.value.length;
+  currentImageIndex.value = (currentImageIndex.value - 1 + len) % len;
+};
+
+const goToImage = (index: number) => {
+  if (!hasMedia.value) return;
+  const len = gallery.value.length;
+  if (index < 0 || index >= len) return;
+  currentImageIndex.value = index;
 };
 </script>
 
@@ -49,7 +65,15 @@ const prevImage = () => {
   <section class="container max-w-5xl px-6 py-12 mx-auto text-white">
     <h2 class="py-16 mb-8 text-5xl font-bold text-center">My Works</h2>
 
-    <div v-if="pending" class="py-16 text-center text-gray-400">Loading projects...</div>
+    <div v-if="pending" class="py-8">
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div v-for="i in 6" :key="i" class="p-4 rounded-2xl bg-white/5 ring-1 ring-white/10 animate-pulse">
+          <div class="w-full h-48 mb-4 bg-white/10 rounded-xl"></div>
+          <div class="h-5 mb-2 bg-white/10 rounded"></div>
+          <div class="h-4 bg-white/10 rounded w-2/3"></div>
+        </div>
+      </div>
+    </div>
     <div v-else-if="error" class="py-16 text-center text-red-400">Failed to load projects. Check Supabase config.</div>
 
     <div v-else v-for="category in byCategory" :key="category.category" class="mb-12">
@@ -61,16 +85,42 @@ const prevImage = () => {
         <div
           v-for="project in category.projects"
           :key="project.title"
-          class="cursor-pointer project-card group"
+          class="relative overflow-hidden cursor-pointer group"
           @click="openModal(project)"
         >
-          <img :src="project.image" alt="Project image" class="project-image" />
-          <div class="flex flex-col justify-between h-full p-4">
-            <div>
-              <h4 class="text-xl font-bold">{{ project.title }}</h4>
-              <p class="mt-2 text-sm text-gray-400">{{ project.description }}</p>
+          <!-- Decorative gradient border wrapper -->
+          <div class="absolute inset-0 rounded-2xl bg-gradient-to-br from-teal-400/20 via-blue-400/10 to-purple-500/20 opacity-0 group-hover:opacity-100 transition" />
+
+          <div class="relative p-0.5 rounded-2xl ring-1 ring-white/10 bg-white/5 backdrop-blur-sm">
+            <div class="relative overflow-hidden rounded-[1rem]">
+              <img
+                :src="project.image"
+                alt="Project image"
+                class="object-cover w-full h-48 transition duration-500 scale-100 group-hover:scale-105"
+              />
+
+              <!-- Top-right video badge if project has video -->
+              <div v-if="project.video" class="absolute px-2 py-1 text-xs rounded-full top-2 right-2 bg-black/60 backdrop-blur text-white">
+                <i class="mr-1 fas fa-play"></i> Video
+              </div>
+
+              <!-- Bottom gradient overlay -->
+              <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/70 to-transparent" />
+
+              <!-- Content -->
+              <div class="absolute inset-x-0 bottom-0 p-4">
+                <h4 class="text-lg font-semibold">{{ project.title }}</h4>
+                <p class="mt-1 text-sm text-gray-300 line-clamp-2">{{ project.description }}</p>
+
+                <div class="flex items-center justify-end mt-3">
+                  <span
+                    class="inline-flex items-center gap-1 text-sm text-teal-300/90 group-hover:text-teal-200 transition"
+                  >
+                    View Details <i class="text-xs fas fa-arrow-right"></i>
+                  </span>
+                </div>
+              </div>
             </div>
-            <button class="block mt-2 text-sm text-right text-green-400 hover:underline">View Details →</button>
           </div>
         </div>
       </div>
@@ -78,82 +128,103 @@ const prevImage = () => {
 
     <!-- Full Page Modal for Project Details -->
     <transition name="fade-scale">
-      <div v-if="selectedProject" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div
+        v-if="selectedProject"
+        class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+      >
         <transition name="slide-up">
-          <div class="bg-[#0a192f] p-6 rounded-lg max-w-screen-lg w-full h-[90vh] overflow-hidden relative">
-            <button @click="closeModal" class="absolute text-red-400 top-2 right-4 hover:underline">✖ Close</button>
+          <div
+            class="bg-[#0b1220]/95 backdrop-blur-md p-6 md:p-8 rounded-3xl shadow-2xl ring-1 ring-white/10 max-w-screen-xl w-full h-[92vh] overflow-hidden relative"
+          >
+            <button
+              @click="closeModal"
+              class="absolute inline-flex items-center justify-center w-10 h-10 text-white transition rounded-full top-4 right-4 bg-white/10 hover:bg-white/20"
+              aria-label="Close"
+            >
+              <i class="fas fa-times"></i>
+            </button>
 
-            <h3 class="mb-4 text-3xl font-bold text-center">
+            <h3
+              class="mb-2 text-3xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-teal-300 via-blue-300 to-purple-300"
+            >
               {{ selectedProject.title }}
             </h3>
 
-            <div class="flex flex-col gap-6 md:flex-row">
-              <!-- Video -->
-              <div v-if="selectedProject.video" class="relative w-full mb-10 md:w-1/2">
-                <iframe
-                  v-if="selectedProject.video && selectedProject.video.includes('youtube.com')"
-                  :src="selectedProject.video"
-                  class="w-full rounded-lg h-60"
-                  frameborder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  referrerpolicy="strict-origin-when-cross-origin"
-                  allowfullscreen
-                ></iframe>
+            <p v-if="selectedProject.short_talk" class="mb-6 italic text-center text-gray-300">
+              "{{ selectedProject.short_talk }}"
+            </p>
 
-                <video v-else-if="selectedProject.video" controls class="w-full rounded-lg h-52">
-                  <source :src="selectedProject.video" type="video/mp4" />
-                  Your browser does not support the video tag.
-                </video>
-              </div>
-
-              <div class="flex flex-col w-full py-16 md:w-1/2">
-                <!-- Short Talk -->
-                <p v-if="selectedProject.short_talk" class="items-center mb-4 text-center text-gray-400 text-1xl bold">
-                  "{{ selectedProject.short_talk }}"
-                </p>
-              </div>
-            </div>
-
-            <!-- Animated Image Gallery with Slider -->
-            <div v-if="hasImages" class="relative flex flex-col items-center mt-6">
-              <!-- Main Large Image View with Animation -->
-              <div class="relative w-full max-w-3xl overflow-hidden h-96">
+            <!-- Unified Media Slider (Video + Images) -->
+            <div v-if="hasMedia" class="relative flex flex-col items-center mt-2">
+              <div
+                class="relative w-full max-w-5xl h-[60vh] md:h-[65vh] overflow-hidden rounded-3xl ring-1 ring-white/10 shadow-2xl bg-black/20"
+              >
                 <transition name="fade-slide" mode="out-in">
-                  <img
-                    :src="selectedProject.images[currentImageIndex].url"
-                    class="absolute inset-0 object-cover w-full transition-all duration-500 rounded-lg shadow-lg h-96"
-                  />
+                  <div :key="currentImageIndex" class="absolute inset-0">
+                    <img
+                      v-if="gallery[currentImageIndex]?.type === 'image'"
+                      :src="gallery[currentImageIndex].src"
+                      class="absolute inset-0 object-cover w-full h-full"
+                    />
+                    <iframe
+                      v-else-if="gallery[currentImageIndex]?.type === 'youtube'"
+                      :src="gallery[currentImageIndex].src"
+                      class="absolute inset-0 w-full h-full"
+                      frameborder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      referrerpolicy="strict-origin-when-cross-origin"
+                      allowfullscreen
+                    ></iframe>
+                    <video
+                      v-else-if="gallery[currentImageIndex]?.type === 'video'"
+                      controls
+                      class="absolute inset-0 object-contain w-full h-full bg-black"
+                    >
+                      <source :src="gallery[currentImageIndex].src" type="video/mp4" />
+                    </video>
+                  </div>
                 </transition>
 
                 <!-- Navigation Buttons -->
                 <button
                   @click="prevImage"
-                  class="absolute p-2 text-white transform -translate-y-1/2 rounded-full left-4 top-1/2 bg-black/50"
+                  class="absolute p-3 text-white transform -translate-y-1/2 rounded-full left-4 top-1/2 bg-black/50 hover:bg-black/60"
+                  aria-label="Previous"
                 >
-                  <
+                  <i class="fas fa-chevron-left"></i>
                 </button>
                 <button
                   @click="nextImage"
-                  class="absolute p-2 text-white transform -translate-y-1/2 rounded-full right-4 top-1/2 bg-black/50"
+                  class="absolute p-3 text-white transform -translate-y-1/2 rounded-full right-4 top-1/2 bg-black/50 hover:bg-black/60"
+                  aria-label="Next"
                 >
-                  >
+                  <i class="fas fa-chevron-right"></i>
                 </button>
               </div>
 
-              <!-- Thumbnail Images -->
-              <div class="flex gap-2 mt-4 overflow-x-auto">
-                <img
-                  v-for="(img, index) in selectedProject.images"
+              <!-- Dot Indicators -->
+              <div class="flex items-center gap-3 mt-6">
+                <button
+                  v-for="(_, index) in gallery"
                   :key="index"
-                  :src="img"
-                  class="object-cover w-10 h-10 transition duration-200 border-2 rounded-md cursor-pointer"
-                  :class="{ 'border-blue-400': selectedImage === img }"
-                  @click="openImage(img, index)"
-                />
+                  :aria-label="`Go to media ${index + 1}`"
+                  @click="goToImage(index)"
+                  class="relative transition"
+                >
+                  <span
+                    class="block rounded-full"
+                    :class="[
+                      'w-2.5 h-2.5',
+                      currentImageIndex === index
+                        ? 'bg-gradient-to-r from-teal-300 to-blue-400 shadow-[0_0_0_5px_rgba(56,189,248,0.25)]'
+                        : 'bg-white/50 hover:bg-white/80',
+                    ]"
+                  />
+                </button>
               </div>
             </div>
 
-            <p class="mt-6 text-center text-gray-300">
+            <p class="max-w-3xl mx-auto mt-6 text-center text-gray-300">
               {{ selectedProject.description }}
             </p>
           </div>

@@ -85,6 +85,7 @@ export function useExperiences() {
   const { data, pending, error, refresh } = useFetch<Experience[]>("/api/experiences", {
     key: "experiences",
     server: true,
+    lazy: false,
     default: () => [],
   });
 

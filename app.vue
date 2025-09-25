@@ -28,6 +28,21 @@ import Footer from "@/components/Footer.vue";
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
+/* Global background to prevent white flashes during overscroll */
+html,
+body,
+#__nuxt {
+  background-color: #0a192f;
+  min-height: 100%;
+}
+
+/* Improve dark feel on mobile chrome/safari and reduce scroll chaining */
+html,
+body {
+  color-scheme: dark;
+  overscroll-behavior-y: none;
+  overscroll-behavior-x: none;
+}
 /* Darker Animated Background */
 .animated-bg {
   position: absolute;

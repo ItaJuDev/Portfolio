@@ -15,10 +15,23 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 500, statusMessage: error.message });
   }
 
-  const normalized = (data || []).map((p: any) => ({
-    ...p,
-    images: Array.isArray(p?.images) ? p.images : p?.images ? [p.images] : [],
-  }));
+  const toUrl = (val: any) => {
+    if (!val) return "";
+    if (typeof val === "string") return val;
+    if (typeof val === "object") return val.url || val.src || "";
+    return String(val);
+  };
+
+  const normalized = (data || []).map((p: any) => {
+    const rawImages = Array.isArray(p?.images) ? p.images : p?.images ? [p.images] : [];
+    const images = rawImages.map(toUrl).filter(Boolean);
+    return {
+      ...p,
+      image: toUrl(p?.image) || images[0] || null,
+      video: toUrl(p?.video) || null,
+      images,
+    };
+  });
 
   setHeader(event, "Cache-Control", "public, s-maxage=300, stale-while-revalidate=86400");
   return normalized;

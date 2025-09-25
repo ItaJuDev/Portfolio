@@ -6,9 +6,7 @@
       <!-- Work Experience -->
       <div class="bg-black/20 p-6 rounded-lg shadow-lg border border-gray-600 backdrop-blur-lg md:col-span-1">
         <h3 class="text-xl font-semibold text-gray-100">Company Experiences</h3>
-        <ClientOnly>
-          <ExperienceList />
-        </ClientOnly>
+        <ExperienceList />
       </div>
 
       <!-- Learning Projects -->

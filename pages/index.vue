@@ -3,6 +3,9 @@ import Main from "@/components/Main.vue";
 import Works from "@/components/Works.vue";
 import Skills from "@/components/Skills.vue";
 import Contact from "@/components/Contact.vue";
+
+// Prefetch experiences on SSR so child components reuse the payload
+await useFetch("/api/experiences", { key: "experiences" });
 </script>
 
 <template>
