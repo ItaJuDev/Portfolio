@@ -7,13 +7,15 @@ import Footer from "@/components/Footer.vue";
   <title>ItaJuDev Portfolio</title>
   <div class="bg-black text-white font-sans">
     <div class="relative w-full min-h-screen bg-[#0a192f] overflow-hidden">
-      <!-- Animated Background -->
-      <div class="absolute inset-0 z-0">
+      <!-- Animated Background (non-interactive, always behind content) -->
+      <div class="absolute inset-0 -z-10 pointer-events-none">
         <div class="animated-bg"></div>
       </div>
 
       <Header />
-      <NuxtPage />
+      <div class="relative z-10">
+        <NuxtPage />
+      </div>
       <Footer />
 
       <!-- Page Content (Everything inside will stay on top) -->

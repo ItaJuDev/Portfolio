@@ -98,7 +98,7 @@ const goToImage = (index: number) => {
           v-for="c in categories"
           :key="c.value"
           @click="selectedCategory = c.value"
-          class="px-3 py-1 text-sm transition rounded-full ring-1 ring-white/10"
+          class="px-3 py-1 text-sm transition rounded-full ring-1 ring-white/10 z-1"
           :class="
             selectedCategory === c.value ? 'bg-white/15 text-white' : 'bg-white/5 text-white/80 hover:bg-white/10'
           "
