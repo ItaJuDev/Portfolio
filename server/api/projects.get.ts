@@ -31,13 +31,61 @@ export default defineEventHandler(async (event) => {
     return String(val);
   };
 
+  const toSeconds = (t: string | null) => {
+    if (!t) return 0;
+    // Accept forms like 90, 90s, 1m30s, 2h3m4s
+    if (/^\d+$/.test(t)) return Number(t);
+    const re = /(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s)?/i;
+    const m = t.match(re);
+    if (!m) return 0;
+    const h = Number(m[1] || 0);
+    const mnt = Number(m[2] || 0);
+    const s = Number(m[3] || 0);
+    return h * 3600 + mnt * 60 + s;
+  };
+
+  const normalizeYouTube = (url: string) => {
+    try {
+      const u = new URL(url);
+      const host = u.hostname.replace(/^www\./, "");
+      if (host === "youtu.be") {
+        const id = u.pathname.replace(/^\//, "");
+        if (!id) return url;
+        const start = toSeconds(u.searchParams.get("t") || u.searchParams.get("start"));
+        return `https://www.youtube.com/embed/${id}${start ? `?start=${start}` : ""}`;
+      }
+      if (host.endsWith("youtube.com")) {
+        // /watch?v=ID
+        if (u.pathname === "/watch") {
+          const id = u.searchParams.get("v");
+          if (!id) return url;
+          const start = toSeconds(u.searchParams.get("t") || u.searchParams.get("start"));
+          return `https://www.youtube.com/embed/${id}${start ? `?start=${start}` : ""}`;
+        }
+        // /shorts/ID
+        if (u.pathname.startsWith("/shorts/")) {
+          const id = u.pathname.split("/")[2];
+          if (!id) return url;
+          return `https://www.youtube.com/embed/${id}`;
+        }
+        // already /embed/ID
+        if (u.pathname.startsWith("/embed/")) {
+          return url;
+        }
+      }
+    } catch (_) {
+      // fallthrough
+    }
+    return url;
+  };
+
   const normalized = (data || []).map((p: any) => {
     const rawImages = Array.isArray(p?.images) ? p.images : p?.images ? [p.images] : [];
     const images = rawImages.map(toUrl).filter(Boolean);
     return {
       ...p,
       image: toUrl(p?.image) || images[0] || null,
-      video: toUrl(p?.video) || null,
+      video: normalizeYouTube(toUrl(p?.video) || "") || null,
       project_link: toUrl(p?.project_link) || null,
       publish_link: toUrl(p?.publish_link) || null,
       images,
