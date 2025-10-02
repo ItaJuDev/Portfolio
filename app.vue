@@ -5,10 +5,10 @@ import Footer from "@/components/Footer.vue";
 
 <template>
   <title>ItaJuDev Portfolio</title>
-  <div class="bg-black text-white font-sans">
+  <div class="font-sans text-white bg-black">
     <div class="relative w-full min-h-screen bg-[#0a192f] overflow-hidden">
-      <!-- Animated Background (non-interactive, always behind content) -->
-      <div class="absolute inset-0 -z-10 pointer-events-none">
+      <!-- Animated Background (non-interactive, alwaxys behind content) -->
+      <div class="absolute inset-0 pointer-events-none -z-10">
         <div class="animated-bg"></div>
       </div>
 
@@ -19,7 +19,7 @@ import Footer from "@/components/Footer.vue";
       <Footer />
 
       <!-- Page Content (Everything inside will stay on top) -->
-      <div class="relative z-10 max-w-5xl mx-auto px-6 md:px-16">
+      <div class="relative z-10 max-w-5xl px-6 mx-auto md:px-16">
         <slot />
       </div>
     </div>

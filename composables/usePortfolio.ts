@@ -21,6 +21,7 @@ type Project = {
   order_index?: number | null;
   project_link?: string | null;
   publish_link?: string | null;
+  techs?: Array<{ id: number; name: string; icon?: string | null; short: string }> | null;
 };
 
 type Experience = {

@@ -146,6 +146,28 @@ const goToImage = (index: number) => {
             <p class="mt-1 text-sm text-gray-300 line-clamp-2 min-h-[2.5rem]">
               {{ project.description }}
             </p>
+            <!-- Tech stack under description -->
+            <div
+              v-if="Array.isArray(project.techs) && project.techs.length"
+              class="flex flex-wrap items-center gap-2 mt-2"
+            >
+              <span
+                v-for="t in project.techs"
+                :key="`${project.id}-tech-${t.id}`"
+                class="inline-flex items-center gap-1 px-2 py-1 text-[11px] rounded-full bg-white/5 ring-1 ring-white/10 text-white/90"
+                @click.stop
+              >
+                <img
+                  v-if="t.icon"
+                  :src="`https://skillicons.dev/icons?i=${t.icon}`"
+                  alt=""
+                  class="w-4 h-4"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <span class="truncate max-w-[7rem]">{{ t.short || t.name }}</span>
+              </span>
+            </div>
             <!-- Tags row under description -->
             <div class="flex flex-wrap items-center gap-2 pt-2 mt-auto">
               <a

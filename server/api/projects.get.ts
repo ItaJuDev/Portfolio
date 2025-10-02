@@ -89,8 +89,61 @@ export default defineEventHandler(async (event) => {
       project_link: toUrl(p?.project_link) || null,
       publish_link: toUrl(p?.publish_link) || null,
       images,
+      // placeholder; will be filled below if join table exists
+      techs: [] as Array<{ id: number; name: string; icon?: string | null; short: string }>,
     };
   });
+
+  // Attempt to attach tech stack per project via join table `project_skills`
+  // Schema suggestion:
+  //   project_skills(project_id -> projects.id, skill_id -> skills.id, alias text null, order_index int null)
+  // If the table doesn't exist yet, this block fails silently and `techs` stays empty.
+  try {
+    const projectIds = normalized.map((p: any) => p.id).filter(Boolean);
+    if (projectIds.length) {
+      const { data: links, error: linksErr } = await supabase
+        .from("project_skills")
+        .select("project_id, skill_id, alias, order_index")
+        .in("project_id", projectIds);
+
+      if (!linksErr && links && links.length) {
+        const skillIds = Array.from(new Set(links.map((l: any) => l.skill_id).filter(Boolean)));
+        if (skillIds.length) {
+          const { data: skills, error: skillsErr } = await supabase
+            .from("skills")
+            .select("id, name, icon")
+            .in("id", skillIds);
+          if (!skillsErr && skills) {
+            const skillMap = new Map<number, { id: number; name: string; icon?: string | null }>();
+            for (const s of skills as any[]) skillMap.set(s.id, s);
+
+            const grouped = new Map<number, any[]>();
+            for (const l of links as any[]) {
+              const s = skillMap.get(l.skill_id);
+              if (!s) continue;
+              const entry = { id: s.id, name: s.name, icon: s.icon || null, short: String(l.alias || s.name) };
+              if (!grouped.has(l.project_id)) grouped.set(l.project_id, []);
+              grouped.get(l.project_id)!.push({ ...entry, order_index: l.order_index ?? null });
+            }
+
+            for (const p of normalized as any[]) {
+              const items = (grouped.get(p.id) || [])
+                .sort((a: any, b: any) => {
+                  const ai = a.order_index ?? 0;
+                  const bi = b.order_index ?? 0;
+                  if (ai !== bi) return ai - bi;
+                  return String(a.short).localeCompare(String(b.short));
+                })
+                .map(({ order_index, ...rest }: any) => rest);
+              p.techs = items;
+            }
+          }
+        }
+      }
+    }
+  } catch (_) {
+    // Ignore; optional enhancement only
+  }
 
   setHeader(event, "Cache-Control", "public, s-maxage=300, stale-while-revalidate=86400");
   return normalized;
