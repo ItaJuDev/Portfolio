@@ -121,7 +121,8 @@ export default defineEventHandler(async (event) => {
             for (const l of links as any[]) {
               const s = skillMap.get(l.skill_id);
               if (!s) continue;
-              const entry = { id: s.id, name: s.name, icon: s.icon || null, short: String(l.alias || s.name) };
+              // Ignore alias for display; always use skill name
+              const entry = { id: s.id, name: s.name, icon: s.icon || null, short: String(s.name) };
               if (!grouped.has(l.project_id)) grouped.set(l.project_id, []);
               grouped.get(l.project_id)!.push({ ...entry, order_index: l.order_index ?? null });
             }
@@ -132,7 +133,7 @@ export default defineEventHandler(async (event) => {
                   const ai = a.order_index ?? 0;
                   const bi = b.order_index ?? 0;
                   if (ai !== bi) return ai - bi;
-                  return String(a.short).localeCompare(String(b.short));
+                  return String(a.name).localeCompare(String(b.name));
                 })
                 .map(({ order_index, ...rest }: any) => rest);
               p.techs = items;

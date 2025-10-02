@@ -165,7 +165,7 @@ const goToImage = (index: number) => {
                   loading="lazy"
                   decoding="async"
                 />
-                <span class="truncate max-w-[7rem]">{{ t.short || t.name }}</span>
+                <span class="truncate max-w-[7rem]">{{ t.name }}</span>
               </span>
             </div>
             <!-- Tags row under description -->
