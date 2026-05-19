@@ -83,6 +83,42 @@
     ]
   },
   {
+    "id": "a1b2c3d4-0001-4000-8000-000000000001",
+    "title": "Balloon Shooting",
+    "description": "A WebGL balloon shooting game made with Unity.",
+    "short_talk": "A fun WebGL balloon shooting game built with Unity. Aim and pop balloons as fast as you can!",
+    "category": "GAME_DEV",
+    "order_index": null,
+    "image": "/images/BalloonShooting/1.jpg",
+    "images": ["/images/BalloonShooting/1.jpg"],
+    "video": null,
+    "project_link": null,
+    "publish_link": null,
+    "techs": [
+      { "id": "8a0dfd14-c6ec-4495-9c99-2c97049c3c11", "name": "Unity", "icon": "unity", "short": "Unity" },
+      { "id": "be19c372-2da0-4c08-869f-310ee8d80feb", "name": "C#", "icon": "cs", "short": "C#" },
+      { "id": "85e5706d-2104-49f0-b4ad-1f007caeba91", "name": "Visual Studio", "icon": "visualstudio", "short": "Visual Studio" }
+    ]
+  },
+  {
+    "id": "a1b2c3d4-0002-4000-8000-000000000002",
+    "title": "Claw Machine",
+    "description": "A WebGL claw machine game made with Unity.",
+    "short_talk": "A WebGL claw machine simulation built with Unity. Control the claw and grab prizes!",
+    "category": "GAME_DEV",
+    "order_index": null,
+    "image": "/images/ClawMachine/1.jpg",
+    "images": ["/images/ClawMachine/1.jpg"],
+    "video": null,
+    "project_link": null,
+    "publish_link": null,
+    "techs": [
+      { "id": "8a0dfd14-c6ec-4495-9c99-2c97049c3c11", "name": "Unity", "icon": "unity", "short": "Unity" },
+      { "id": "be19c372-2da0-4c08-869f-310ee8d80feb", "name": "C#", "icon": "cs", "short": "C#" },
+      { "id": "85e5706d-2104-49f0-b4ad-1f007caeba91", "name": "Visual Studio", "icon": "visualstudio", "short": "Visual Studio" }
+    ]
+  },
+  {
     "id": "1983c8d7-acc2-4043-b9dc-0bcbd534af1e",
     "title": "Math Relate Game",
     "description": "An Endless running game.",
