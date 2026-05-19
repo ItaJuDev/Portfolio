@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Remove-Item \"d:\\\\ZnWork\\\\Portfolio\\\\server\\\\utils\\\\supabase.ts\" -Force)",
+      "Bash(Remove-Item \"d:\\\\ZnWork\\\\Portfolio\\\\plugins\\\\supabase.client.ts\" -Force)",
+      "Bash(cp -r \"d:/ZnWork/Portfolio/SupabaseBackup/spqzqerwekupmhicvicu.storage/spqzqerwekupmhicvicu/Project Media/12Tails/.\" \"d:/ZnWork/Portfolio/public/images/12Tails/\")",
+      "Bash(cp -r \"d:/ZnWork/Portfolio/SupabaseBackup/spqzqerwekupmhicvicu.storage/spqzqerwekupmhicvicu/Project Media/HeroBois/.\" \"d:/ZnWork/Portfolio/public/images/HeroBois/\")",
+      "Bash(cp -r \"d:/ZnWork/Portfolio/SupabaseBackup/spqzqerwekupmhicvicu.storage/spqzqerwekupmhicvicu/Project Media/MathRelate/.\" \"d:/ZnWork/Portfolio/public/images/MathRelate/\")",
+      "Bash(cp -r \"d:/ZnWork/Portfolio/SupabaseBackup/spqzqerwekupmhicvicu.storage/spqzqerwekupmhicvicu/Project Media/TrackIt/.\" \"d:/ZnWork/Portfolio/public/images/TrackIt/\")",
+      "Bash(cp -r \"d:/ZnWork/Portfolio/SupabaseBackup/spqzqerwekupmhicvicu.storage/spqzqerwekupmhicvicu/Project Media/VrMatchingShape/.\" \"d:/ZnWork/Portfolio/public/images/VrMatchingShape/\")",
+      "Bash(npm run *)"
+    ]
+  }
+}

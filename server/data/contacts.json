@@ -1,0 +1,47 @@
+[
+  {
+    "id": "b7af061b-260a-4111-99ce-ffb7af41c557",
+    "label": "GitHub",
+    "type": "Github",
+    "url": "https://github.com/ItaJuDev",
+    "icon": "github",
+    "order_index": null,
+    "active": true
+  },
+  {
+    "id": "ab5923ee-5447-4c7c-903d-430c622186b8",
+    "label": "Linkedin",
+    "type": "Linked In",
+    "url": "https://www.linkedin.com/in/vitit-charubencharat/",
+    "icon": "linkedin",
+    "order_index": null,
+    "active": true
+  },
+  {
+    "id": "8eb10aeb-260e-43f2-858d-643c3a7289ae",
+    "label": "Discord",
+    "type": "Discord",
+    "url": "https://discord.com/users/408995873587068928",
+    "icon": "discord",
+    "order_index": null,
+    "active": true
+  },
+  {
+    "id": "49e93380-9fba-4322-8f69-30821ac2a9ce",
+    "label": "Gmail",
+    "type": "gmail",
+    "url": "mailto:vitit.charubencharat@gmail.com",
+    "icon": "gmail",
+    "order_index": null,
+    "active": true
+  },
+  {
+    "id": "7a4356ac-b0d0-471a-84fb-4b9cdddaf0a9",
+    "label": "Fastwork",
+    "type": "fastwork",
+    "url": "https://fastwork.co/user/itajudev",
+    "icon": "fastwork",
+    "order_index": null,
+    "active": true
+  }
+]

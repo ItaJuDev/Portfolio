@@ -1,20 +1,16 @@
-import { defineEventHandler, setHeader, createError } from "h3";
-import { serverSupabase } from "~/server/utils/supabase";
+import { defineEventHandler, setHeader } from "h3";
+import contactsData from "../data/contacts.json";
 
 export default defineEventHandler(async (event) => {
-  const supabase = serverSupabase();
-  const { data, error } = await supabase
-    .from("contacts")
-    .select("id, label, type, url, icon, order_index, active")
-    .order("order_index", { ascending: true, nullsFirst: true })
-    .order("label", { ascending: true });
-
-  if (error) {
-    throw createError({ statusCode: 500, statusMessage: error.message });
-  }
-
-  const filtered = (data || []).filter((c: any) => c.active !== false);
+  const contacts = [...(contactsData as any[])]
+    .filter((c) => c.active !== false)
+    .sort((a, b) => {
+      const ai = a.order_index ?? 0;
+      const bi = b.order_index ?? 0;
+      if (ai !== bi) return ai - bi;
+      return String(a.label).localeCompare(String(b.label));
+    });
 
   setHeader(event, "Cache-Control", "public, s-maxage=300, stale-while-revalidate=86400");
-  return filtered;
+  return contacts;
 });

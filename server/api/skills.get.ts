@@ -1,19 +1,14 @@
-import { defineEventHandler, setHeader, createError } from "h3";
-import { serverSupabase } from "~/server/utils/supabase";
+import { defineEventHandler, setHeader } from "h3";
+import skillsData from "../data/skills.json";
 
 export default defineEventHandler(async (event) => {
-  const supabase = serverSupabase();
-  const { data, error } = await supabase
-    .from("skills")
-    .select("id, name, icon, description, category, order_index")
-    .order("order_index", { ascending: true, nullsFirst: true })
-    .order("name", { ascending: true });
-
-  if (error) {
-    // serverSupabase throws for config errors; here we only surface query errors
-    throw createError({ statusCode: 500, statusMessage: error.message });
-  }
+  const skills = [...(skillsData as any[])].sort((a, b) => {
+    const ai = a.order_index ?? 0;
+    const bi = b.order_index ?? 0;
+    if (ai !== bi) return ai - bi;
+    return String(a.name).localeCompare(String(b.name));
+  });
 
   setHeader(event, "Cache-Control", "public, s-maxage=300, stale-while-revalidate=86400");
-  return data || [];
+  return skills;
 });

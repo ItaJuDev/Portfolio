@@ -1,0 +1,103 @@
+[
+  {
+    "id": "602e451d-7b6b-4cbc-bf3f-046b2dc7dc2f",
+    "title": "TrackIt",
+    "description": "A simple Flutter app to track income & expenses.",
+    "short_talk": "A simple Flutter app to track income & expenses with a simple UI.",
+    "category": "MOBILE_APP",
+    "order_index": null,
+    "image": "/images/TrackIt/TrackIt.png",
+    "images": ["/images/TrackIt/TrackIt.png"],
+    "video": "https://youtube.com/shorts/7nfjNrI96BA?si=mUG2SBYHugAbtzgE",
+    "project_link": "https://github.com/ItaJuDev/TrackIt",
+    "publish_link": null,
+    "techs": [
+      { "id": "acc6689d-f7e3-4216-84fe-6572d8f47511", "name": "Flutter", "icon": "flutter", "short": "Flutter" },
+      { "id": "458d9f4a-3829-4b76-9942-ea28b107e7dd", "name": "Dart", "icon": "dart", "short": "Dart" }
+    ]
+  },
+  {
+    "id": "16bb960f-bdec-475f-887b-b9e54d1187e6",
+    "title": "VR Matching Shape",
+    "description": "A Virtual Reality game to improve your movement and practice to use vr",
+    "short_talk": null,
+    "category": "GAME_DEV",
+    "order_index": null,
+    "image": "/images/VrMatchingShape/VrPoster.png",
+    "images": ["/images/VrMatchingShape/VrPoster.png", "/images/VrMatchingShape/VrGame.png"],
+    "video": "https://youtu.be/k0ZGAGonSXU",
+    "project_link": null,
+    "publish_link": null,
+    "techs": [
+      { "id": "8a0dfd14-c6ec-4495-9c99-2c97049c3c11", "name": "Unity", "icon": "unity", "short": "Unity" },
+      { "id": "be19c372-2da0-4c08-869f-310ee8d80feb", "name": "C#", "icon": "cs", "short": "C#" },
+      { "id": "85e5706d-2104-49f0-b4ad-1f007caeba91", "name": "Visual Studio", "icon": "visualstudio", "short": "Visual Studio" }
+    ]
+  },
+  {
+    "id": "b385ecc8-0900-4f7e-b7a5-747f4a038a5f",
+    "title": "Hero Bois",
+    "description": "A simple Design of RPG Game.",
+    "short_talk": "My project is a 3D roguelike game. While roguelike games are often seen in 2D formats, I want to explore how the mechanics and replayability of roguelikes can be experienced in a fully 3D environment.",
+    "category": "GAME_DEV",
+    "order_index": null,
+    "image": "/images/HeroBois/HeroBois.png",
+    "images": [
+      "/images/HeroBois/HeroBois.png",
+      "/images/HeroBois/1.png",
+      "/images/HeroBois/2.png",
+      "/images/HeroBois/3.png"
+    ],
+    "video": "https://www.youtube.com/embed/MbqKK-7Fmko",
+    "project_link": null,
+    "publish_link": null,
+    "techs": [
+      { "id": "8a0dfd14-c6ec-4495-9c99-2c97049c3c11", "name": "Unity", "icon": "unity", "short": "Unity" },
+      { "id": "be19c372-2da0-4c08-869f-310ee8d80feb", "name": "C#", "icon": "cs", "short": "C#" },
+      { "id": "85e5706d-2104-49f0-b4ad-1f007caeba91", "name": "Visual Studio", "icon": "visualstudio", "short": "Visual Studio" }
+    ]
+  },
+  {
+    "id": "7e5d7ccf-797c-460c-a8c9-356495e77244",
+    "title": "12TailsOnline Server Side",
+    "description": "A multiplayer online game server.",
+    "short_talk": "Hi there! I'm just developing a game server for 12TailsOnline for learning something new, and I'm loving this game since it published in 2011. I never find the game make me fun and happy like this game. So I decided to make a server for this game. I hope it will be the Dream server for every one because I developed it with my love <3.",
+    "category": "GAME_DEV",
+    "order_index": null,
+    "image": "/images/12Tails/12TailsPoster.jpg",
+    "images": [
+      "/images/12Tails/12TailsPoster.jpg",
+      "/images/12Tails/1.png",
+      "/images/12Tails/2.png",
+      "/images/12Tails/3.png",
+      "/images/12Tails/4.png",
+      "/images/12Tails/5.png"
+    ],
+    "video": "https://www.youtube.com/embed/P8xABk6rdns",
+    "project_link": null,
+    "publish_link": null,
+    "techs": [
+      { "id": "232cba24-543d-425a-b983-238643714416", "name": ".Net", "icon": "dotnet", "short": ".Net" },
+      { "id": "be19c372-2da0-4c08-869f-310ee8d80feb", "name": "C#", "icon": "cs", "short": "C#" },
+      { "id": "85e5706d-2104-49f0-b4ad-1f007caeba91", "name": "Visual Studio", "icon": "visualstudio", "short": "Visual Studio" }
+    ]
+  },
+  {
+    "id": "1983c8d7-acc2-4043-b9dc-0bcbd534af1e",
+    "title": "Math Relate Game",
+    "description": "An Endless running game.",
+    "short_talk": "A 3D math game designed to make learning math fun and interactive. It features a start lobby, options, and leaderboard, and is built using Unity, Blender, and Photoshop. The game aims to improve math skills while keeping players engaged and entertained.",
+    "category": "GAME_DEV",
+    "order_index": null,
+    "image": "/images/MathRelate/MathRelateGame.png",
+    "images": ["/images/MathRelate/MathRelateGame.png"],
+    "video": "https://www.youtube.com/embed/PK--3uXhfJU",
+    "project_link": null,
+    "publish_link": null,
+    "techs": [
+      { "id": "8a0dfd14-c6ec-4495-9c99-2c97049c3c11", "name": "Unity", "icon": "unity", "short": "Unity" },
+      { "id": "be19c372-2da0-4c08-869f-310ee8d80feb", "name": "C#", "icon": "cs", "short": "C#" },
+      { "id": "85e5706d-2104-49f0-b4ad-1f007caeba91", "name": "Visual Studio", "icon": "visualstudio", "short": "Visual Studio" }
+    ]
+  }
+]

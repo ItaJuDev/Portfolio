@@ -1,0 +1,138 @@
+[
+  {
+    "id": "85e5706d-2104-49f0-b4ad-1f007caeba91",
+    "name": "Visual Studio",
+    "icon": "visualstudio",
+    "description": null,
+    "category": "Others",
+    "order_index": null
+  },
+  {
+    "id": "841d7ffd-75c3-4730-b777-575a057dd0fc",
+    "name": "Visual Studio Code",
+    "icon": "vscode",
+    "description": null,
+    "category": "Others",
+    "order_index": null
+  },
+  {
+    "id": "51a6e37c-2e5f-423b-ac64-6ee344ee119a",
+    "name": "Vue",
+    "icon": "vue",
+    "description": null,
+    "category": "Frontend",
+    "order_index": null
+  },
+  {
+    "id": "a70f0006-1833-4072-bff9-b31c31ad355c",
+    "name": "Next",
+    "icon": "next",
+    "description": null,
+    "category": "Frontend",
+    "order_index": null
+  },
+  {
+    "id": "be19c372-2da0-4c08-869f-310ee8d80feb",
+    "name": "C#",
+    "icon": "cs",
+    "description": null,
+    "category": "Backend",
+    "order_index": null
+  },
+  {
+    "id": "a2b8382a-2c09-41fb-ad29-bec7c8ff67c9",
+    "name": "NestJs",
+    "icon": "nest",
+    "description": null,
+    "category": "Backend",
+    "order_index": null
+  },
+  {
+    "id": "8a0dfd14-c6ec-4495-9c99-2c97049c3c11",
+    "name": "Unity",
+    "icon": "unity",
+    "description": null,
+    "category": "Others",
+    "order_index": null
+  },
+  {
+    "id": "33e2c29e-75c4-475d-a649-6ada6c79a0e2",
+    "name": "Mongo",
+    "icon": "mongo",
+    "description": null,
+    "category": "Others",
+    "order_index": null
+  },
+  {
+    "id": "214ce9cb-0950-4dbe-88f8-122e6948d930",
+    "name": "Redis",
+    "icon": "redis",
+    "description": null,
+    "category": "Others",
+    "order_index": null
+  },
+  {
+    "id": "56e46c96-ed83-49c9-805a-72a9c30bebd2",
+    "name": "PostgresSQL",
+    "icon": "postgresql",
+    "description": null,
+    "category": "Others",
+    "order_index": null
+  },
+  {
+    "id": "f962c764-dfe4-4109-8891-dde5f7081ee1",
+    "name": "Docker",
+    "icon": "docker",
+    "description": null,
+    "category": "Others",
+    "order_index": null
+  },
+  {
+    "id": "232cba24-543d-425a-b983-238643714416",
+    "name": ".Net",
+    "icon": "dotnet",
+    "description": null,
+    "category": "Backend",
+    "order_index": null
+  },
+  {
+    "id": "58f1c6fa-74f9-4b01-8653-01f1da68cd09",
+    "name": "NodeJS",
+    "icon": "nodejs",
+    "description": null,
+    "category": "Backend",
+    "order_index": null
+  },
+  {
+    "id": "155c2c63-3039-4149-86ec-311b39de7456",
+    "name": "Python",
+    "icon": "py",
+    "description": "Python",
+    "category": "Backend",
+    "order_index": null
+  },
+  {
+    "id": "272a7e6f-0dd8-4047-916e-5952e3286101",
+    "name": "JavaScript",
+    "icon": "js",
+    "description": null,
+    "category": "Backend",
+    "order_index": null
+  },
+  {
+    "id": "acc6689d-f7e3-4216-84fe-6572d8f47511",
+    "name": "Flutter",
+    "icon": "flutter",
+    "description": null,
+    "category": "Frontend",
+    "order_index": null
+  },
+  {
+    "id": "458d9f4a-3829-4b76-9942-ea28b107e7dd",
+    "name": "Dart",
+    "icon": "dart",
+    "description": null,
+    "category": "Frontend",
+    "order_index": null
+  }
+]
